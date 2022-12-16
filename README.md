@@ -1,6 +1,6 @@
 ![StableDiffusion image titled Dawn of Eve](/assets/dawn_of_eve2.png)
 
-# Dawn Of Eve: Will Adam Rest in Peace or Long Live and Prosper? 
+# Dawn Of Eve: Will Adam Optimizer Rest in Peace or Long Live and Prosper? 
 
 Since ages (5 years) Adam has absolutely dominated the Large Language Modelling Sphere for optimization.\
 Practically no other optimizer has come close since plain SGD to the prowess and general usability of Adam, to the point where even after considerable work showcasing improvements over Adam, it still rules. 
