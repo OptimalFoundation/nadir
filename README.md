@@ -1,3 +1,5 @@
+![StableDiffusion image titled Dawn of Eve](assets/dawn_of_eve2.png)
+
 # Dawn Of Eve: Will Adam Rest in Peace or Long Live and Prosper? 
 
 Since ages (5 years) Adam has absolutely dominated the Large Language Modelling Sphere for optimization.\
