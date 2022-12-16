@@ -13,7 +13,9 @@ Research Problems this project is trying to tackle:
     * There must be a reason why Adam is so dominant for large language modelling, and understanding that is the first step to understading the alternative options to Adam. 
 * "What alternative options are there to Adam? Are they competitive?"
     * There are a number of considerations to make while choosing the optimizer for LLM training, like convergence speed, memory overload, training speed and more. For alternatives to be truely competitive, they should present significiant improvements in one or more of these factors.
-    * Another important factor to understand if Adam should be replaced for LLM training is that "can you live without the alternative?". If an alternative is insignificant in its benefit as compared to Adam, utilizing it would not make sense because of the deeprooted-ness of the Adam in the community and ease of use from being readily available in frameworks. 
+    * Another important factor to understand whether Adam should be replaced for LLM training is that "can you live without the alternative?". If an alternative is insignificant in its benefit as compared to Adam, utilizing it would not make sense because of the deeprooted-ness of the Adam in the community and ease of use from being readily available in frameworks.
+* "I see the claims of the alternatives but how well do they actually perform in practice?"
+    * Without extensive experimentation and emperical (hard and cold) evidence to back the claims of improvement over Adam, nothing really matters. That's the beauty of the research community based on peer-review. 
 
 
 
