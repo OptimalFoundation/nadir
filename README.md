@@ -7,6 +7,8 @@ Practically no other optimizer has come close since plain SGD to the prowess and
 
 This repository is a **reseach** project, meant to serve as a benchmark for experiments on Optimizers and Language Modelling. 
 
+## Core Research Problems
+
 Research Problems this project is trying to tackle:
 
 * "Where and how has Adam been utilized for large language modelling?"
@@ -16,7 +18,7 @@ Research Problems this project is trying to tackle:
     * Another important factor to understand whether Adam should be replaced for LLM training is that "can you live without the alternative?". If an alternative is insignificant in its benefit as compared to Adam, utilizing it would not make sense because of the deeprooted-ness of the Adam in the community and ease of use from being readily available in frameworks.
 * "I see the claims of the alternatives but how well do they actually perform in practice?"
     * Without extensive experimentation and emperical (hard and cold) evidence to back the claims of improvement over Adam, nothing really matters. That's the beauty of the research community based on peer-review. 
-
+    * Tragically, one of the reasons why most of the recent work on convex optimisation has not made it to the industry (at least for LLMing) is the lack of proper testing on language modelling objectives, used with transformer-like models. Most papers, if at all, test LLMing on LSTMs, which learn differently than Transformers and might have different results. 
 
 
 ## Citations
