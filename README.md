@@ -1,4 +1,4 @@
-![StableDiffusion image titled Dawn of Eve](./assets/dawn_of_eve2.png)
+![StableDiffusion image titled Dawn of Eve](/assets/dawn_of_eve2.png)
 
 # Dawn Of Eve: Will Adam Rest in Peace or Long Live and Prosper? 
 
