@@ -9,12 +9,6 @@ This repository is a **reseach** project, meant to serve as a benchmark for expe
 
 Finer details of experimental setup are yet to be decided. 
 
-Here's a poem written for the demise of Adam:
-> Adam is Old  
-> Adam is Tired  
-> Adam has Back-Pain  
-> Adam wants to Retire  
->                       ~Author, 2022
 
 ## Citations
 <!-- 
@@ -23,3 +17,12 @@ If you wish to cite this work, please use the following bibtex:
 ``` -->
 
 For a list of citations regarding the papers used to make this repository, please refer to [citations.md](citations.md). If any citation is missing please inform the repository maintainer to get it included. 
+
+## Misc.
+
+Here's a poem written for the demise of Adam:
+> Adam is Old  
+> Adam is Tired  
+> Adam has Back-Pain  
+> Adam wants to Retire  
+>                       ~Author, 2022
