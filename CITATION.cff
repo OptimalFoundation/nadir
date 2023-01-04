@@ -1,0 +1,13 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Dawn of Eve
+message: >-
+  If you are using this research in your own work or
+  any code from the repository, please cite us!
+type: software
+authors:
+  - given-names: Bhavnick
+    family-names: Minhas
+    email: bhavnicksm@gmaill.com
