@@ -3,7 +3,7 @@
 ## Optimisers
 
 1. Sebastian Ruder (2016). An overview of gradient descent optimisation algorithms. arXiv preprint arXiv:1609.04747. https://arxiv.org/abs/1609.04747
-    1. 
+    1. General article talking about all the additions to SGD pre-2016
 
 ```bibtex
 @article{ruder2016overview,
