@@ -15,3 +15,5 @@
 ```
 
 2. John Chen (2020). An updated overview of recent gradient descent algorithms. https://johnchenresearch.github.io/demon/
+
+1. 
