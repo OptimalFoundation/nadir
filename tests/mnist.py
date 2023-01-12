@@ -1,11 +1,63 @@
+import os
+from typing import Any, List
+import argparse
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.optim.lr_scheduler import StepLR
-import wandb
-from torchvision import datasets, transforms, utils
-from tqdm import tqdm
 from torch import optim
+
+from torch.optim.lr_scheduler import StepLR
+from torchvision import datasets, transforms, utils
+
+import wandb
+from tqdm import tqdm
+
+
+# Make a Namespace object to store all the experiment values
+args = argparse.Namespace()
+
+args.learning_rate : float = 1e-3
+args.batch_size : int = 64
+args.test_batch_size : int = 1000
+args.gamma : float = 0.7
+args.device : bool = 'cuda' if torch.cuda.is_available() else 'cpu'
+args.log_interval : int = 10
+args.epochs : int = 5
+args.optim : str = 'Adam'
+
+with open("./tests/random_seeds.txt", 'r') as file:
+    file_str = file.read().split('\n')
+    seeds = [int(num) for num in file_str]
+args.random_seeds : List[int] = seeds
+
+# writing the logging args as a namespace obj
+largs = argparse.Namespace()
+
+
+## Remove the following commented code once args object has been fully integrated
+# class Config:
+#     def __init__(
+#         self,
+#         batch_size: int = 64,
+#         test_batch_size: int = 1000,
+#         epochs: int = 5,
+#         lr: float = 0.01,
+#         gamma: float = 0.7,
+#         no_cuda: bool = True,
+#         seed: int = 42,
+#         log_interval: int = 10,
+#     ):
+#         self.batch_size = batch_size
+#         self.test_batch_size = test_batch_size
+#         self.epochs = epochs
+#         self.lr = lr
+#         self.gamma = gamma
+#         self.no_cuda = no_cuda
+#         self.seed = seed
+#         self.log_interval = log_interval
+
+
 
 class Net(nn.Module):
     def __init__(self):
@@ -28,32 +80,24 @@ class Net(nn.Module):
         x = F.relu(x)
         x = self.dropout2(x)
         x = self.fc2(x)
-        output = F.log_softmax(x, dim=1)
+        # output = F.log_softmax(x, dim=1)
+        output = x
         return output
 
 
-def train(conf, model, device, train_loader, optimizer, epoch, wandb):
+def train(conf, model, device, train_loader, optimizer, epoch):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
-        loss = F.nll_loss(output, target)
+        loss = F.cross_entropy(output, target)
         loss.backward()
         optimizer.step()
         if batch_idx % conf.log_interval == 0:
             loss = loss.item()
             idx = batch_idx + epoch * (len(train_loader))
             wandb.log({'Loss/train': loss})
-            # print(
-            #     'Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-            #         epoch,
-            #         batch_idx * len(data),
-            #         len(train_loader.dataset),
-            #         100.0 * batch_idx / len(train_loader),
-            #         loss,
-            #     )
-            # )
     return loss
 
 
@@ -117,40 +161,13 @@ def prepare_loaders(conf, use_cuda=False):
     return train_loader, test_loader
 
 
-class Config:
-    def __init__(
-        self,
-        batch_size: int = 64,
-        test_batch_size: int = 1000,
-        epochs: int = 5,
-        lr: float = 0.01,
-        gamma: float = 0.7,
-        no_cuda: bool = True,
-        seed: int = 42,
-        log_interval: int = 10,
-    ):
-        self.batch_size = batch_size
-        self.test_batch_size = test_batch_size
-        self.epochs = epochs
-        self.lr = lr
-        self.gamma = gamma
-        self.no_cuda = no_cuda
-        self.seed = seed
-        self.log_interval = log_interval
-
 
 def MNIST_tester(optim=None):
     conf = Config()
     train_loss = []
     test_loss = []
     log_dir = 'runs/mnist_custom_optim'
-    wandb.init(project="test-project", entity="dawn-of-eve")
-    wandb.config = {
-        "learning_rate": conf.lr,
-        "epochs": conf.epochs,
-        "batch_size": conf.batch_size,
-        "gamma": conf.gamma
-    }
+    
     use_cuda = not conf.no_cuda and torch.cuda.is_available()
     torch.manual_seed(conf.seed)
     device = torch.device('cuda' if use_cuda else 'cpu')
@@ -182,5 +199,13 @@ def MNIST_tester(optim=None):
     return train_loss, test_loss
 
 
+# If the file is run directly, follow the following behaviour
+if __name__ == '__main__' :
+    print(vars(args))
 
+    run = wandb.init(project="MNIST", entity="dawn-of-eve")
+    run.name = f'{args.optim}-{args.random_seeds[0]}'
+    run.config.update(args)
+    run.config.update(largs)
 
+    run.finish()
