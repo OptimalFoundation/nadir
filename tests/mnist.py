@@ -7,13 +7,15 @@ from torchvision import datasets, transforms, utils
 from tqdm import tqdm
 from torch import optim
 
+wandb.init(project="MNIST", name="sgd002",entity="dawn-of-eve")
+
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, 3, 1)
         self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout2d(0.25)
-        self.dropout2 = nn.Dropout2d(0.5)
+        self.dropout1 = nn.Dropout(0.25)
+        self.dropout2 = nn.Dropout(0.5)
         self.fc1 = nn.Linear(9216, 128)
         self.fc2 = nn.Linear(128, 10)
 
@@ -144,7 +146,7 @@ def MNIST_tester(optim=None):
     train_loss = []
     test_loss = []
     log_dir = 'runs/mnist_custom_optim'
-    wandb.init(project="test-project", entity="dawn-of-eve")
+    wandb.init(project="test-project", entity="dawn-of-eve", name="sgd001")
     wandb.config = {
         "learning_rate": conf.lr,
         "epochs": conf.epochs,
@@ -180,7 +182,6 @@ def MNIST_tester(optim=None):
     )
 )
     return train_loss, test_loss
-
 
 
 
