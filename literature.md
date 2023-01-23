@@ -36,7 +36,7 @@
     3. Also the paper states that any adaptive method that is based on exponentially weighted moving averages (EWMA) of the gradients, including RMSProp, AdaDelta and NAdam, are also flawed.
     4. To solve this authors propose a new optimizer, AMSgrad, which introduces a hot-fix ${\hat v_{t+1}} = {\max(v_{t+1}, \hat v_t)}$.  
      Refer [notes](https://www.notion.so/On-the-Convergence-of-Adam-and-Beyond-fbadcd3f494243fab44b712e08e8dc73) for details.
-```
+```bibtex
 @article{reddi2019convergence,
   title={On the convergence of adam and beyond},
   author={Reddi, Sashank J and Kale, Satyen and Kumar, Sanjiv},
