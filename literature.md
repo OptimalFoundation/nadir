@@ -30,3 +30,17 @@
 }
 
 ```
+4. Reddi, Sashank J., et al. (2019) "On the convergence of adam and beyond." https://arxiv.org/pdf/1904.09237.pdf
+    1. The paper looks into the flaws made in the proof of Adam optimizer, and states that Adam does not correctly converge in all problems.
+    2. This happens because of the exponential gradients which scale down the effect of large gradients, which maybe less frequent but in positive direction.
+    3. Also the paper states that any adaptive method that is based on exponentially weighted moving averages (EWMA) of the gradients, including RMSProp, AdaDelta and NAdam, are also flawed.
+    4. To solve this authors propose a new optimizer, AMSgrad, which introduces a hot-fix ${\hat v_{t+1}} = {\max(v_{t+1}, \hat v_t)}$.  
+     Refer [notes](https://www.notion.so/On-the-Convergence-of-Adam-and-Beyond-fbadcd3f494243fab44b712e08e8dc73) for details.
+```
+@article{reddi2019convergence,
+  title={On the convergence of adam and beyond},
+  author={Reddi, Sashank J and Kale, Satyen and Kumar, Sanjiv},
+  journal={arXiv preprint arXiv:1904.09237},
+  year={2019}
+}
+```
