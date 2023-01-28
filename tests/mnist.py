@@ -1,17 +1,72 @@
+### Copyright 2023 [Dawn Of Eve]
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+import os, random
+from typing import Any, List
+import argparse
+
+import numpy as np
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.optim.lr_scheduler import StepLR
-import wandb
-from torchvision import datasets, transforms, utils
-from tqdm import tqdm
 from torch import optim
 
-wandb.init(project="MNIST", name="sgd002",entity="dawn-of-eve")
+from torch.optim.lr_scheduler import StepLR
+from torchvision import datasets, transforms, utils
 
-class Net(nn.Module):
+import wandb
+from tqdm import tqdm
+
+torch.backends.cudnn.benchmark = False
+torch.backends.cudnn.deterministic=True
+
+# Make a Namespace object to store all the experiment values
+args = argparse.Namespace()
+
+args.learning_rate : float = 1e-3
+args.batch_size : int = 64
+args.test_batch_size : int = 1000
+args.gamma : float = 0.7
+args.device : bool = 'cuda' if torch.cuda.is_available() else 'cpu'
+args.log_interval : int = 10
+args.epochs : int = 10
+args.optim : Any = torch.optim.Adam
+
+with open("./tests/random_seeds.txt", 'r') as file:
+    file_str = file.read().split('\n')
+    seeds = [int(num) for num in file_str]
+args.random_seeds : List[int] = seeds
+
+args.seed : int = args.random_seeds[0]
+
+# writing the logging args as a namespace obj
+largs = argparse.Namespace()
+largs.run_name : str = 'Adam'
+largs.run_seed : str = args.seed
+
+
+# Initialising the seeds
+torch.manual_seed(args.seed)
+torch.cuda.manual_seed(args.seed)
+np.random.seed(args.seed)
+random.seed(args.seed)
+
+class MNISTestNet(nn.Module):
     def __init__(self):
-        super(Net, self).__init__()
+        super(MNISTestNet, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, 3, 1)
         self.conv2 = nn.Conv2d(32, 64, 3, 1)
         self.dropout1 = nn.Dropout(0.25)
@@ -30,60 +85,53 @@ class Net(nn.Module):
         x = F.relu(x)
         x = self.dropout2(x)
         x = self.fc2(x)
-        output = F.log_softmax(x, dim=1)
+        output = x
         return output
 
 
-def train(conf, model, device, train_loader, optimizer, epoch, wandb):
+def train(args, model, device, train_loader, optimizer, epoch):
     model.train()
-    for batch_idx, (data, target) in enumerate(train_loader):
+    for (data, target)in (pbar := tqdm(train_loader)):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
-        loss = F.nll_loss(output, target)
+        loss = F.cross_entropy(output, target)
         loss.backward()
         optimizer.step()
-        if batch_idx % conf.log_interval == 0:
-            loss = loss.item()
-            idx = batch_idx + epoch * (len(train_loader))
-            wandb.log({'Loss/train': loss})
-            # print(
-            #     'Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-            #         epoch,
-            #         batch_idx * len(data),
-            #         len(train_loader.dataset),
-            #         100.0 * batch_idx / len(train_loader),
-            #         loss,
-            #     )
-            # )
+        pbar.set_description(f"Loss: {loss.item() : .5f}")
+        wandb.log({'train/Loss': loss.item()})
     return loss
 
 
-def test(conf, model, device, test_loader, epoch, wandb):
+def test(model, device, test_loader):
     model.eval()
     test_loss = 0
     correct = 0
     with torch.no_grad():
-        for data, target in test_loader:
+        for data, target in (pbar := tqdm(test_loader)):
+            data, target = data.to(device), target.to(device)
             output = model(data)
-            test_loss += F.nll_loss(output, target, size_average=False).item()
+            test_loss += F.cross_entropy(output, target, reduction='mean').item()
             pred = output.data.max(1, keepdim=True)[1]
             correct += pred.eq(target.data.view_as(pred)).sum().item()
-    test_loss /= len(test_loader.dataset)
-    print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-                                                                            test_loss, 
-                                                                            correct, 
-                                                                            len(test_loader.dataset),
-                                                                            100. * correct / len(test_loader.dataset)
-                                                                            ))
 
-    wandb.log({'Accuracy': correct})
-    wandb.log({'Loss/test': test_loss})
+            pbar.set_description(f"Accuracy: {correct/len(test_loader) : .4f}")
+    test_loss /= len(test_loader.dataset)
+    wandb.log({'test/Accuracy': correct})
+    wandb.log({'test/Loss': test_loss})
     return test_loss
 
 
-def prepare_loaders(conf, use_cuda=False):
+def prepare_loaders(args, use_cuda=False):
     kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
+    generator = torch.Generator()
+    generator.manual_seed(args.seed)
+
+    def seed_worker():
+        worker_seed = torch.initial_seed() % 2**32
+        np.random.seed(worker_seed)
+        random.seed(worker_seed)
+
     train_loader = torch.utils.data.DataLoader(
         datasets.MNIST(
             '../data',
@@ -96,8 +144,10 @@ def prepare_loaders(conf, use_cuda=False):
                 ]
             ),
         ),
-        batch_size=conf.batch_size,
+        batch_size=args.batch_size,
         shuffle=True,
+        worker_init_fn = seed_worker,
+        generator=generator,
         **kwargs,
     )
 
@@ -112,53 +162,26 @@ def prepare_loaders(conf, use_cuda=False):
                 ]
             ),
         ),
-        batch_size=conf.test_batch_size,
+        batch_size=args.test_batch_size,
         shuffle=True,
+        worker_init_fn=seed_worker,
+        generator=generator,
         **kwargs,
     )
     return train_loader, test_loader
 
 
-class Config:
-    def __init__(
-        self,
-        batch_size: int = 64,
-        test_batch_size: int = 1000,
-        epochs: int = 5,
-        lr: float = 0.01,
-        gamma: float = 0.7,
-        no_cuda: bool = True,
-        seed: int = 42,
-        log_interval: int = 10,
-    ):
-        self.batch_size = batch_size
-        self.test_batch_size = test_batch_size
-        self.epochs = epochs
-        self.lr = lr
-        self.gamma = gamma
-        self.no_cuda = no_cuda
-        self.seed = seed
-        self.log_interval = log_interval
 
-
-def MNIST_tester(optim=None):
-    conf = Config()
+def mnist_tester(optim=None, args = None, largs = None):
     train_loss = []
     test_loss = []
-    log_dir = 'runs/mnist_custom_optim'
-    wandb.init(project="test-project", entity="dawn-of-eve", name="sgd001")
-    wandb.config = {
-        "learning_rate": conf.lr,
-        "epochs": conf.epochs,
-        "batch_size": conf.batch_size,
-        "gamma": conf.gamma
-    }
-    use_cuda = not conf.no_cuda and torch.cuda.is_available()
-    torch.manual_seed(conf.seed)
-    device = torch.device('cuda' if use_cuda else 'cpu')
-    train_loader, test_loader = prepare_loaders(conf, use_cuda)
+    
+    torch.manual_seed(args.random_seeds[0])
+    device = args.device
+    use_cuda = True if device == torch.device('cuda') else False
+    train_loader, test_loader = prepare_loaders(args, use_cuda)
 
-    model = Net().to(device)
+    model = MNISTestNet().to(device)
 
     # create grid of images and write to wandb
     images, labels = next(iter(train_loader))
@@ -166,22 +189,37 @@ def MNIST_tester(optim=None):
     wandb.log({'mnist_images': img_grid})
 
     # custom optimizer from torch_optimizer package
-    optimizer = optim(model.parameters(), lr=conf.lr)
+    optimizer = optim(model.parameters(), lr=args.learning_rate)
 
-    scheduler = StepLR(optimizer, step_size=1, gamma=conf.gamma)
-    for epoch in tqdm(range(1, conf.epochs + 1)):
-        loss=train(conf, model, device, train_loader, optimizer, epoch, wandb)
-        tloss=test(conf, model, device, test_loader, epoch, wandb)
+    scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
+
+
+
+    for epoch in (pbar := tqdm(range(1,  args.epochs + 1))):
+        loss=train(args, model, device, train_loader, optimizer, epoch)
+        tloss=test(model, device, test_loader)
         scheduler.step()
         train_loss.append(loss)
         test_loss.append(tloss)
-        print(
-            'Train Epoch: {} \tLoss: {:.6f}'.format(
-            epoch,
-            loss
-    )
-)
+        pbar.set_description(f"Loss: {loss:.5f}")
     return train_loss, test_loss
 
 
+# If the file is run directly, follow the following behaviour
+if __name__ == '__main__' :
 
+    # Initialising the WANDB project
+    run = wandb.init(project="MNIST", entity="dawn-of-eve")
+    run.name = f'{largs.run_name}'
+    run.config.update(args)
+    run.config.update(largs)
+
+    
+
+    # Initialising the optimiser
+    optim = args.optim
+
+    # Running the mnist_tester
+    mnist_tester(optim, args, largs)
+
+    run.finish()
