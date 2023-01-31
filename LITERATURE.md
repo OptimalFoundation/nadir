@@ -44,3 +44,14 @@
   year={2019}
 }
 ```
+
+5. Zhang, Y., et al. (2022) "Adam can converge without any modification on update rules." https://arxiv.org/pdf/2208.09632v2.pdf
+    1. explains flaws in Reddi et al. (2018) and shows that Adam can converge without any modification on its update rules. When $β_2$ is large enough and      $β_1 < √β_2,$ Adam converges to the neighborhood of critical points.
+```bibtex
+@article{zhang2022adam,
+  title={Adam can converge without any modification on update rules},
+  author={Zhang, Yushun and Chen, Congliang and Shi, Naichen and Sun, Ruoyu and Luo, Zhi-Quan},
+  journal={arXiv preprint arXiv:2208.09632},
+  year={2022}
+}
+```
