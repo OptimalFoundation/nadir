@@ -1,10 +1,9 @@
-import math
 import torch
 from dataclasses import dataclass
 
 from minima.optim import BaseOptimizer
 from minima.optim import DoEConfig
-from typing import Dict, Tuple, Any, Optional
+from typing import Dict, Any, Optional
 
 
 __all__ = ['SGD', 'sgd']

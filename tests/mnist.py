@@ -14,7 +14,7 @@
 
 
 import os, random
-from typing import Any, List
+from typing import Any, List, Tuple
 import argparse
 
 import numpy as np
@@ -23,8 +23,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import dawnofeve
-from dawnofeve import optim
+import minima
+from minima import optim
 
 from torch.optim.lr_scheduler import StepLR
 from torchvision import datasets, transforms, utils
@@ -45,7 +45,9 @@ args.gamma : float = 0.7
 args.device : bool = 'cuda' if torch.cuda.is_available() else 'cpu'
 args.log_interval : int = 10
 args.epochs : int = 10
-args.optimizer : Any = optim.SGD
+args.betas : Tuple[float, float] = (0.9, 0.99)
+args.eps : float = 1e-16
+args.optimizer : Any = optim.Adam
 
 with open("./tests/random_seeds.txt", 'r') as file:
     file_str = file.read().split('\n')
@@ -56,7 +58,7 @@ args.seed : int = args.random_seeds[0]
 
 # writing the logging args as a namespace obj
 largs = argparse.Namespace()
-largs.run_name : str = 'DoE-SGD'
+largs.run_name : str = 'DoE-Adam'
 largs.run_seed : str = args.seed
 
 
@@ -191,8 +193,10 @@ def mnist_tester(optimizer=None, args = None, largs = None):
     wandb.log({'mnist_images': img_grid})
 
     # custom optimizer from torch_optimizer package
-    config = optim.SGDConfig(lr=args.learning_rate)
-
+    if args.optimizer == optim.SGD:
+        config = optim.SGDConfig(lr=args.learning_rate)
+    elif args.optimizer == optim.Adam:
+        config = optim.AdamConfig(lr=args.learning_rate, betas=args.betas, eps=args.eps)
     # config = config(lr=args.learning_rate)
     optimizer = optimizer(model.parameters(), config)
     # optimizer = optim(model.parameters(), lr=args.learning_rate)
