@@ -22,7 +22,9 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch import optim
+
+import dawnofeve
+from dawnofeve import optim
 
 from torch.optim.lr_scheduler import StepLR
 from torchvision import datasets, transforms, utils
@@ -43,7 +45,7 @@ args.gamma : float = 0.7
 args.device : bool = 'cuda' if torch.cuda.is_available() else 'cpu'
 args.log_interval : int = 10
 args.epochs : int = 10
-args.optim : Any = torch.optim.Adam
+args.optimizer : Any = optim.SGD
 
 with open("./tests/random_seeds.txt", 'r') as file:
     file_str = file.read().split('\n')
@@ -54,7 +56,7 @@ args.seed : int = args.random_seeds[0]
 
 # writing the logging args as a namespace obj
 largs = argparse.Namespace()
-largs.run_name : str = 'Adam'
+largs.run_name : str = 'DoE-SGD'
 largs.run_seed : str = args.seed
 
 
@@ -115,9 +117,9 @@ def test(model, device, test_loader):
             pred = output.data.max(1, keepdim=True)[1]
             correct += pred.eq(target.data.view_as(pred)).sum().item()
 
-            pbar.set_description(f"Accuracy: {correct/len(test_loader) : .4f}")
+            pbar.set_description(f"Accuracy: {correct/len(test_loader.dataset) : .4f}")
     test_loss /= len(test_loader.dataset)
-    wandb.log({'test/Accuracy': correct})
+    wandb.log({'test/Accuracy': correct/len(test_loader.dataset)})
     wandb.log({'test/Loss': test_loss})
     return test_loss
 
@@ -172,7 +174,7 @@ def prepare_loaders(args, use_cuda=False):
 
 
 
-def mnist_tester(optim=None, args = None, largs = None):
+def mnist_tester(optimizer=None, args = None, largs = None):
     train_loss = []
     test_loss = []
     
@@ -189,7 +191,11 @@ def mnist_tester(optim=None, args = None, largs = None):
     wandb.log({'mnist_images': img_grid})
 
     # custom optimizer from torch_optimizer package
-    optimizer = optim(model.parameters(), lr=args.learning_rate)
+    config = optim.SGDConfig(lr=args.learning_rate)
+
+    # config = config(lr=args.learning_rate)
+    optimizer = optimizer(model.parameters(), config)
+    # optimizer = optim(model.parameters(), lr=args.learning_rate)
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
 
@@ -217,9 +223,12 @@ if __name__ == '__main__' :
     
 
     # Initialising the optimiser
-    optim = args.optim
+    optimizer = args.optimizer
+    #    config = AutoConfig(args.params..)
+    #    optimizer = args.optimizer(config)
+
 
     # Running the mnist_tester
-    mnist_tester(optim, args, largs)
+    mnist_tester(optimizer, args, largs)
 
     run.finish()
