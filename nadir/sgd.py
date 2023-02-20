@@ -16,8 +16,8 @@
 import torch
 from dataclasses import dataclass
 
-from minima.optim import BaseOptimizer
-from minima.optim import DoEConfig
+from .BaseOptimiser import BaseOptimizer
+from .BaseOptimiser import DoEConfig
 from typing import Dict, Any, Optional
 
 
