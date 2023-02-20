@@ -21,3 +21,5 @@ from .SGD import SGD, SGDConfig
 from .adam import Adam, AdamConfig
 
 __all__ = ('SGD', 'SGDConfig', 'Adam', 'AdamConfig')
+
+__version__ = "0.0.1"
