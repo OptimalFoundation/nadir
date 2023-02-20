@@ -3,3 +3,8 @@ wandb/
 
 .ipynb
 *.credentials
+
+dist
+dist/*
+
+nadir.egg-info/*
