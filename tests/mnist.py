@@ -23,8 +23,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import minima
-from minima import optim
+from nadir import nadir as optim
+
 
 from torch.optim.lr_scheduler import StepLR
 from torchvision import datasets, transforms, utils
@@ -49,10 +49,10 @@ args.betas : Tuple[float, float] = (0.9, 0.99)
 args.eps : float = 1e-16
 args.optimizer : Any = optim.Adam
 
-with open("./tests/random_seeds.txt", 'r') as file:
-    file_str = file.read().split('\n')
-    seeds = [int(num) for num in file_str]
-args.random_seeds : List[int] = seeds
+# with open("random_seeds.txt", 'r') as file:
+#     file_str = file.read().split('\n')
+#     seeds = [int(num) for num in file_str]
+args.random_seeds : List[int] = [42]
 
 args.seed : int = args.random_seeds[0]
 
@@ -138,7 +138,7 @@ def prepare_loaders(args, use_cuda=False):
 
     train_loader = torch.utils.data.DataLoader(
         datasets.MNIST(
-            '../data',
+            '../../data',
             train=True,
             download=True,
             transform=transforms.Compose(

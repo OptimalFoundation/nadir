@@ -11,11 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
 from typing import Dict, List, Type
 from torch.optim.optimizer import Optimizer
 from .BaseOptimiser import BaseOptimizer, DoEConfig
 
-from .sgd import SGD, SGDConfig
+from .SGD import SGD, SGDConfig
 from .adam import Adam, AdamConfig
 
 __all__ = ('SGD', 'SGDConfig', 'Adam', 'AdamConfig')
