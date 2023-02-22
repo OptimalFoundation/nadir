@@ -17,20 +17,20 @@ import torch
 from dataclasses import dataclass
 
 from .BaseOptimiser import BaseOptimizer
-from .BaseOptimiser import DoEConfig
+from .BaseOptimiser import BaseConfig
 from typing import Dict, Any, Optional
 
 
 __all__ = ['SGD', 'sgd']
 
 @dataclass
-class SGDConfig(DoEConfig):
+class SGDConfig(BaseConfig):
     lr : float = 1e-3
     momentum: float = 0
     nesterov: bool = False
 
 class SGD(BaseOptimizer):
-    def __init__(self, params, config: DoEConfig, defaults: Optional[Dict[str, Any]] = None):
+    def __init__(self, params, config: SGDConfig, defaults: Optional[Dict[str, Any]] = None):
         if not 0.0 <= config.lr:
             raise ValueError(f"Invalid learning rate: {config.lr}")
         if not 0.0 <= config.momentum < 1.0:
