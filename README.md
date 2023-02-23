@@ -22,3 +22,13 @@ To install Nadir into your python environment, paste the commands in your termin
 ```bash
 $ pip install git+https://github.com/Dawn-Of-Eve/nadir.git
 ```
+
+## Usage
+
+```
+import nadir as nd
+config = nd.SGDConfig(lr=learning_rate)
+optimizer = nd.SGD(model.parameters(), config)
+
+```
+
