@@ -18,7 +18,7 @@ import torch
 from torch.optim.optimizer import Optimizer
 
 
-class DoEConfig():
+class BaseConfig():
     pass
 
 
@@ -27,7 +27,7 @@ class BaseOptimizer(Optimizer):
     def __init__(
         self, 
         params, 
-        config : DoEConfig, 
+        config : BaseConfig, 
         defaults: Dict[str, Any] 
 
 
