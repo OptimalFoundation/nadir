@@ -19,7 +19,7 @@ At present, the objective is to merely get the ball rolling. We introduce Nadir 
 Currently, Nadir is not on the PyPi packaging index, so you would need to install it from source. To install Nadir into your python environment, paste the commands in your terminal:
 
 ```bash
-$ pip install git+https://github.com/Dawn-Of-Eve/nadir.git
+$ pip install nadir
 ```
 
 ## Usage
