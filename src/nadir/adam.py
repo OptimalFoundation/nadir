@@ -31,7 +31,7 @@ class AdamConfig(DoEConfig):
 
 
 class Adam(BaseOptimizer):
-    def __init__(self, params, config: DoEConfig, defaults: Optional[Dict[str, Any]] = None):
+    def __init__(self, params, config: AdamConfig, defaults: Optional[Dict[str, Any]] = None):
         if not 0.0 <= config.lr:
             raise ValueError(f"Invalid learning rate: {config.lr}")
         if not 0.0 <= config.eps:

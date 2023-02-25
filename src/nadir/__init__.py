@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 from typing import Dict, List, Type
 from torch.optim.optimizer import Optimizer
-from .BaseOptimiser import BaseOptimizer, DoEConfig
+from .BaseOptimiser import BaseOptimizer, BaseConfig
 
 from .SGD import SGD, SGDConfig
 from .adam import Adam, AdamConfig
 
 __all__ = ('SGD', 'SGDConfig', 'Adam', 'AdamConfig')
 
-__version__ = "0.0.1"
+__version__ = "0.0.1.dev2"

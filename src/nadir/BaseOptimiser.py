@@ -22,7 +22,6 @@ class BaseConfig():
     pass
 
 
-
 class BaseOptimizer(Optimizer):
     def __init__(
         self, 
@@ -35,8 +34,3 @@ class BaseOptimizer(Optimizer):
         defaults = config.__dict__
 
         super().__init__(params, defaults)
-    
-    
-
-
-
