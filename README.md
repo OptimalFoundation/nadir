@@ -24,7 +24,7 @@ PyTorch is a popular machine learning framework that provides a flexible and eff
 
 ## Installation
 
-Nadir is on the PyPi packaging Index! partying_face
+Nadir is on the PyPi packaging Index! :partying_face:
 
 Simply run the following command on your terminal and start using Nadir now!
 
