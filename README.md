@@ -20,13 +20,18 @@ Currently, Nadir is not on the PyPi packaging index, so you would need to instal
 To install Nadir into your python environment, paste the commands in your terminal:
 
 ```bash
-$ pip install git+https://github.com/Dawn-Of-Eve/nadir.git
+$ pip install nadir
 ```
 
 ## Usage
 
-```
+```python
 import nadir as nd
+
+# some model setup here...
+model = ...
+
+# set up your Nadir optimiser
 config = nd.SGDConfig(lr=learning_rate)
 optimizer = nd.SGD(model.parameters(), config)
 
