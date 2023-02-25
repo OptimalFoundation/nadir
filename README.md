@@ -9,7 +9,7 @@
 
 PyTorch is a popular machine learning framework that provides a flexible and efficient way of building and training deep neural networks. This library, Nadir, is built on top of PyTorch to provide high-performing general-purpose optimisation algorithms.  
 
-*** :warning: Currently in Developement Beta version with every update having breaking changes; user discreation and caution advised! :warning:***
+:warning: ***Currently in Developement Beta version with every update having breaking changes; user discreation and caution advised!*** :warning:
 
 ## Supported Optimisers
 
