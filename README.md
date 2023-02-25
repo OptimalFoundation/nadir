@@ -9,7 +9,7 @@
 
 PyTorch is a popular machine learning framework that provides a flexible and efficient way of building and training deep neural networks. This library, Nadir, is built on top of PyTorch to provide high-performing general-purpose optimisation algorithms.  
 
-At present, the objective is to merely get the ball rolling. We introduce Nadir with two optimization algorithms, namely Stochastic Gradient Descent (SGD) and Adaptive Momentum (AdaM). There are many variations of these two algorithms which can be explored. Synchronous and asynchronous, centered and uncentered or the use of the first or second moment in the adaptive term leads to algorithms with varying performances in different circumstances. In the future, we aim to add more of these to the mix.
+*** :warning: Currently in Developement Beta version with every update having breaking changes; user discreation and caution advised! :warning:***
 
 ## Supported Optimisers
 
