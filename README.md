@@ -24,7 +24,9 @@ PyTorch is a popular machine learning framework that provides a flexible and eff
 
 ## Installation
 
-Currently, Nadir is not on the PyPi packaging index, so you would need to install it from source. To install Nadir into your python environment, paste the commands in your terminal:
+Nadir is on the PyPi packaging Index! partying_face
+
+Simply run the following command on your terminal and start using Nadir now!
 
 ```bash
 $ pip install nadir
