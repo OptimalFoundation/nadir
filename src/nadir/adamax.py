@@ -21,11 +21,11 @@ from .base import BaseOptimizer
 from .base import BaseConfig
 
 
-__all__ = ['AdamConfig', 'Adam']
+__all__ = ['AdamaxConfig', 'Adamax']
 
 @dataclass
-class AdamConfig(BaseConfig):
-  lr : float = 3E-4
+class AdamaxConfig(BaseConfig):
+  lr : float = 2E-3
   momentum : bool = True
   adaptive : bool = True
   beta_1 : float = 0.9
@@ -33,17 +33,21 @@ class AdamConfig(BaseConfig):
   eps : float = 1E-8
 
 
-
-class Adam(BaseOptimizer):
-
-  def __init__(self, params, config : AdamConfig = AdamConfig()):
+class Adamax(BaseOptimizer):
+  def __init__ (self, params, config : AdamaxConfig = AdamaxConfig()):
     if not config.momentum:
       raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
                        "Value must be True")
     if not config.adaptive:
       raise ValueError(f"Invalid value for adaptive in config: {config.adaptive} ", 
                        "Value must be True")
-      
+    
     super().__init__(params, config)
-
     self.config = config
+  
+  def adaptivity(self, state, grad):
+    u = state['adaptivity']
+    beta_2 = self.config.beta_2
+    u = torch.max(torch.mul(u, beta_2), torch.abs(grad) + self.config.eps)
+    state['adaptivity'] = u
+    return u

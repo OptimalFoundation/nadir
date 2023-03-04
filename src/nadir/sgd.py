@@ -11,26 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from typing import Dict, Tuple, Any, Optional
+from typing import Dict, Any, Optional
+from dataclasses import dataclass
 
 import torch
-from torch.optim.optimizer import Optimizer
+
+from .base import BaseOptimizer
+from .base import BaseConfig
 
 
-class BaseConfig():
-    pass
+__all__ = ['SGDConfig', 'SGD']
+
+@dataclass
+class SGDConfig(BaseConfig):
+  lr : float = 1E-3
 
 
-class BaseOptimizer(Optimizer):
-    def __init__(
-        self, 
-        params, 
-        config : BaseConfig, 
-        defaults: Dict[str, Any] 
-
-
-    ):
-        defaults = config.__dict__
-
-        super().__init__(params, defaults)
+class SGD(BaseOptimizer):
+  
+  def __init__(self, params, config: SGDConfig = SGDConfig()):
+    super().__init__(params, config)

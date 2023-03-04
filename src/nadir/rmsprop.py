@@ -21,29 +21,23 @@ from .base import BaseOptimizer
 from .base import BaseConfig
 
 
-__all__ = ['AdamConfig', 'Adam']
+__all__ = ['RMSPropConfig', 'RMSProp']
 
 @dataclass
-class AdamConfig(BaseConfig):
-  lr : float = 3E-4
-  momentum : bool = True
+class RMSPropConfig(BaseConfig):
+  lr : float = 1E-3
   adaptive : bool = True
-  beta_1 : float = 0.9
-  beta_2 : float = 0.999
+  beta_2 : float = 0.9
   eps : float = 1E-8
 
 
 
-class Adam(BaseOptimizer):
+class RMSProp(BaseOptimizer):
 
-  def __init__(self, params, config : AdamConfig = AdamConfig()):
-    if not config.momentum:
-      raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
-                       "Value must be True")
+  def __init__ (self, params, config:RMSPropConfig = RMSPropConfig()):
     if not config.adaptive:
       raise ValueError(f"Invalid value for adaptive in config: {config.adaptive} ", 
                        "Value must be True")
       
     super().__init__(params, config)
-
     self.config = config

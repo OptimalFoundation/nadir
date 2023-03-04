@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
 
@@ -21,29 +20,19 @@ from .base import BaseOptimizer
 from .base import BaseConfig
 
 
-__all__ = ['AdamConfig', 'Adam']
+__all__ = ['MomentumConfig', 'Momentum']
 
 @dataclass
-class AdamConfig(BaseConfig):
-  lr : float = 3E-4
+class MomentumConfig(BaseConfig):
+  lr : float = 1E-3
   momentum : bool = True
-  adaptive : bool = True
-  beta_1 : float = 0.9
-  beta_2 : float = 0.999
-  eps : float = 1E-8
+  beta_1 : float = 0.95
 
-
-
-class Adam(BaseOptimizer):
-
-  def __init__(self, params, config : AdamConfig = AdamConfig()):
+class Momentum(BaseOptimizer):
+  
+  def __init__(self, params, config : MomentumConfig = MomentumConfig()):
     if not config.momentum:
       raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
                        "Value must be True")
-    if not config.adaptive:
-      raise ValueError(f"Invalid value for adaptive in config: {config.adaptive} ", 
-                       "Value must be True")
-      
     super().__init__(params, config)
-
     self.config = config

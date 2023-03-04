@@ -16,10 +16,17 @@ PyTorch is a popular machine learning framework that provides a flexible and eff
 
 ## Supported Optimisers
 
-| Optimiser 	| Paper 	|
-|:---------:	|:-----:	|
-|  **SGD**  	|       	|
-|  **Adam** 	|       	|
+| Optimiser 	| Paper 	                                            |
+|:---------:	|:-----:	                                            |
+|  **SGD**  	| https://paperswithcode.com/method/sgd                 |
+|  **Momentum** | https://paperswithcode.com/method/sgd-with-momentum   |
+|  **Adagrad** 	| https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf |
+|  **RMSProp** 	| https://paperswithcode.com/method/rmsprop             |
+|  **Adam**     | https://arxiv.org/abs/1412.6980v9                     |
+|  **Adamax**   | https://arxiv.org/abs/1412.6980v9                     |
+|  **Adadelta** | https://arxiv.org/abs/1212.5701v1                     |
+
+
 
 
 ## Installation
