@@ -14,11 +14,33 @@
 
 from typing import Dict, List, Type
 from torch.optim.optimizer import Optimizer
-from .BaseOptimiser import BaseOptimizer, BaseConfig
 
-from .SGD import SGD, SGDConfig
+
+from .adadelta import Adadelta, AdadeltaConfig
+from .adagrad import Adagrad, AdagradConfig
 from .adam import Adam, AdamConfig
+from .adamax import Adamax, AdamaxConfig
+from .base import BaseOptimizer, BaseConfig
+from .momentum import Momentum, MomentumConfig
+from .rmsprop import RMSProp, RMSPropConfig
+from .sgd import SGD, SGDConfig
 
-__all__ = ('SGD', 'SGDConfig', 'Adam', 'AdamConfig')
 
-__version__ = "0.0.1.dev2"
+__version__ = "0.0.1"
+
+__all__ = ('Adadelta',
+           'AdadeltaConfig',
+           'Adagrad',
+           'AdagradConfig',
+           'Adam',
+           'AdamConfig',
+           'Adamax', 
+           'AdamaxConfig', 
+           'BaseOptimizer',
+           'BaseConfig',
+           'Momentum',
+           'MomentumConfig',
+           'RMSProp',
+           'RMSPropConfig',
+           'SGD',
+           'SGDConfig')
