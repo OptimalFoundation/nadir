@@ -69,11 +69,12 @@ class BaseOptimizer(Optimizer):
     beta_1 = self.config.beta_1
 
     m.mul_(beta_1).add_(grad, alpha= (1 - beta_1))
-    m.div_(1 - beta_1**(step + 1))
+    m_hat = m.div(1 - beta_1**(step + 1))
 
     state['momentum'] = m
     state['momentum_step'] = step + 1
-    return m
+
+    return m_hat
   
   def adaptivity(self, 
                  state, 
@@ -84,11 +85,11 @@ class BaseOptimizer(Optimizer):
     beta_2 = self.config.beta_2
 
     v.mul_(beta_2).addcmul_(grad, grad, value = (1 - beta_2))
-    v.div_(1 - beta_2**(step + 1))
+    v_hat = v.div(1 - beta_2**(step + 1))
 
     state['adaptivity'] = v
     state['step'] = step + 1
-    return torch.sqrt(v + self.config.eps)
+    return torch.sqrt(v_hat + self.config.eps)
 
   def update(self,
              state: Dict[str, any],
