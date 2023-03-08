@@ -26,7 +26,7 @@ from .rmsprop import RMSProp, RMSPropConfig
 from .sgd import SGD, SGDConfig
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 __all__ = ('Adadelta',
            'AdadeltaConfig',
