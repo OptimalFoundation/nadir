@@ -12,3 +12,5 @@ dist/*
 src/nadir.egg-info/*
 
 nadir.egg-info/*
+
+tests/data/*
