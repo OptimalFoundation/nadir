@@ -58,7 +58,7 @@ args.seed : int = args.random_seeds[0]
 
 # writing the logging args as a namespace obj
 largs = argparse.Namespace()
-largs.run_name : str = 'Nadir-Adadelta 2'
+largs.run_name : str = 'Nadir-Lion'
 largs.run_seed : str = args.seed
 
 
@@ -94,7 +94,7 @@ class MNISTestNet(nn.Module):
         return output
 
 
-def train(args, model, device, train_loader, optimizer, epoch):
+def train(args, model, device, train_loader, oAdadeltaptimizer, epoch):
     model.train()
     for (data, target)in (pbar := tqdm(train_loader)):
         data, target = data.to(device), target.to(device)
@@ -212,13 +212,11 @@ if __name__ == '__main__' :
     run.name = f'{largs.run_name}'
     run.config.update(args)
     run.config.update(largs)
-
     
-
     # Initialising the optimiser
     model = MNISTestNet().to(args.device)
     # config = nd.AdadeltaConfig(lr = args.learning_rate, beta_1=args.betas[0], beta_2=args.betas[1])
-    optimizer = nd.Adadelta(model.parameters())
+    optimizer = nd.Lion(model.parameters())
     #    config = AutoConfig(args.params..)
     #    optimizer = args.optimizer(config)
 

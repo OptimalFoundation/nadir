@@ -21,12 +21,14 @@ from .adagrad import Adagrad, AdagradConfig
 from .adam import Adam, AdamConfig
 from .adamax import Adamax, AdamaxConfig
 from .base import BaseOptimizer, BaseConfig
+from .lion import Lion, LionConfig
 from .momentum import Momentum, MomentumConfig
 from .rmsprop import RMSProp, RMSPropConfig
+from .radam import Radam, RadamConfig
 from .sgd import SGD, SGDConfig
 
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 __all__ = ('Adadelta',
            'AdadeltaConfig',
@@ -35,12 +37,17 @@ __all__ = ('Adadelta',
            'Adam',
            'AdamConfig',
            'Adamax', 
-           'AdamaxConfig', 
+           'AdamaxConfig',
+           'Adam' 
            'BaseOptimizer',
            'BaseConfig',
+           'Lion',
+           'LionConfig',
            'Momentum',
            'MomentumConfig',
            'RMSProp',
            'RMSPropConfig',
+           'Radam',
+           'RadamConfig',
            'SGD',
            'SGDConfig')
