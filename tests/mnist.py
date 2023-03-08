@@ -23,7 +23,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from nadir import nadir as optim
+import nadir as nd
 
 
 from torch.optim.lr_scheduler import StepLR
@@ -45,28 +45,29 @@ args.gamma : float = 0.7
 args.device : bool = 'cuda' if torch.cuda.is_available() else 'cpu'
 args.log_interval : int = 10
 args.epochs : int = 10
-args.betas : Tuple[float, float] = (0.9, 0.99)
-args.eps : float = 1e-16
-args.optimizer : Any = optim.Adam
+args.betas : Tuple[float, float] = (0.9, 0.999)
+args.eps : float = 1e-8
+args.optimizer : Any = nd.SGD
 
-# with open("random_seeds.txt", 'r') as file:
-#     file_str = file.read().split('\n')
-#     seeds = [int(num) for num in file_str]
-args.random_seeds : List[int] = [42]
+with open("random_seeds.txt", 'r') as file:
+    file_str = file.read().split('\n')
+    seeds = [int(num) for num in file_str]
+args.random_seeds : List[int] = seeds
 
 args.seed : int = args.random_seeds[0]
 
 # writing the logging args as a namespace obj
 largs = argparse.Namespace()
-largs.run_name : str = 'DoE-Adam'
+largs.run_name : str = 'Nadir-Adadelta 2'
 largs.run_seed : str = args.seed
 
 
 # Initialising the seeds
-torch.manual_seed(args.seed)
-torch.cuda.manual_seed(args.seed)
-np.random.seed(args.seed)
-random.seed(args.seed)
+def set_seed(x : int):
+    torch.manual_seed(x)
+    torch.cuda.manual_seed(x)
+    np.random.seed(x)
+    random.seed(x)
 
 class MNISTestNet(nn.Module):
     def __init__(self):
@@ -138,7 +139,7 @@ def prepare_loaders(args, use_cuda=False):
 
     train_loader = torch.utils.data.DataLoader(
         datasets.MNIST(
-            '../../data',
+            './data',
             train=True,
             download=True,
             transform=transforms.Compose(
@@ -157,7 +158,7 @@ def prepare_loaders(args, use_cuda=False):
 
     test_loader = torch.utils.data.DataLoader(
         datasets.MNIST(
-            '../data',
+            './data',
             train=False,
             transform=transforms.Compose(
                 [
@@ -176,33 +177,21 @@ def prepare_loaders(args, use_cuda=False):
 
 
 
-def mnist_tester(optimizer=None, args = None, largs = None):
+def mnist_tester(model, optimizer=None, args = None):
     train_loss = []
     test_loss = []
     
-    torch.manual_seed(args.random_seeds[0])
+    set_seed(args.random_seeds[0])
     device = args.device
     use_cuda = True if device == torch.device('cuda') else False
     train_loader, test_loader = prepare_loaders(args, use_cuda)
 
-    model = MNISTestNet().to(device)
-
     # create grid of images and write to wandb
-    images, labels = next(iter(train_loader))
-    img_grid = utils.make_grid(images)
-    wandb.log({'mnist_images': img_grid})
-
-    # custom optimizer from torch_optimizer package
-    if args.optimizer == optim.SGD:
-        config = optim.SGDConfig(lr=args.learning_rate)
-    elif args.optimizer == optim.Adam:
-        config = optim.AdamConfig(lr=args.learning_rate, betas=args.betas, eps=args.eps)
-    # config = config(lr=args.learning_rate)
-    optimizer = optimizer(model.parameters(), config)
-    # optimizer = optim(model.parameters(), lr=args.learning_rate)
+    # images, labels = next(iter(train_loader))
+    # img_grid = utils.make_grid(images)
+    # wandb.log({'mnist_images': img_grid})
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
-
 
 
     for epoch in (pbar := tqdm(range(1,  args.epochs + 1))):
@@ -227,12 +216,13 @@ if __name__ == '__main__' :
     
 
     # Initialising the optimiser
-    optimizer = args.optimizer
+    model = MNISTestNet().to(args.device)
+    # config = nd.AdadeltaConfig(lr = args.learning_rate, beta_1=args.betas[0], beta_2=args.betas[1])
+    optimizer = nd.Adadelta(model.parameters())
     #    config = AutoConfig(args.params..)
     #    optimizer = args.optimizer(config)
 
-
     # Running the mnist_tester
-    mnist_tester(optimizer, args, largs)
+    mnist_tester(model, optimizer, args)
 
     run.finish()
