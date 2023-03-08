@@ -28,12 +28,14 @@ class BaseConfig:
   beta_1 : float = 0.0
   beta_2 : float = 0.0
   eps : float = 1E-8
+  weight_decay : float = 0.0
+  amsgrad : bool = False
 
   def dict(self):
     return self.__dict__
 
 
-class BaseOptimizer(Optimizer):
+class BaseOptimizer (Optimizer):
 
   def __init__  (self, params, config: BaseConfig = BaseConfig()):
     if not config.lr > 0.0:
@@ -53,18 +55,21 @@ class BaseOptimizer(Optimizer):
                  state,
                  group,
                  param):
-    
+    state['step'] = 0
+
     if self.config.momentum:
-      state['momentum_step'] = 0
       state['momentum'] = torch.zeros_like(param, memory_format=torch.preserve_format)
+    
     if self.config.adaptive:
-      state['adaptive_step'] = 0
       state['adaptivity'] = torch.zeros_like(param, memory_format=torch.preserve_format)
-  
+      
+      if self.config.amsgrad:
+        state['amsgrad'] = torch.zeros_like(param, memory_format=torch.preserve_format)
+
   def momentum(self,
                state, 
                grad):
-    step = state['momentum_step']
+    step = state['step']
     m = state['momentum']
     beta_1 = self.config.beta_1
 
@@ -72,15 +77,29 @@ class BaseOptimizer(Optimizer):
     m_hat = m.div(1 - beta_1**(step + 1))
 
     state['momentum'] = m
-    state['momentum_step'] = step + 1
-
     return m_hat
-  
+
+  def amsgrad(adaptivity):
+
+    def __adaptivity__(self, state, grad):
+      u = adaptivity(self, state, grad)
+
+      if self.config.amsgrad:
+        v = state['amsgrad']
+        v = torch.max(v, u)
+        state['amsgrad'] = v
+        return v
+      
+      return u
+
+    return __adaptivity__
+
+  @amsgrad
   def adaptivity(self, 
                  state, 
                  grad):
     
-    step = state['adaptive_step']
+    step = state['step']
     v = state['adaptivity']
     beta_2 = self.config.beta_2
 
@@ -88,7 +107,6 @@ class BaseOptimizer(Optimizer):
     v_hat = v.div(1 - beta_2**(step + 1))
 
     state['adaptivity'] = v
-    state['step'] = step + 1
     return torch.sqrt(v_hat + self.config.eps)
 
   def update(self,
@@ -111,6 +129,12 @@ class BaseOptimizer(Optimizer):
     else:
       param.data.add_(upd, alpha = -1 * lr)
 
+    if self.config.weight_decay > 0:
+      param.data.add_(param.data,
+                      alpha = -1 * lr * self.config.weight_decay)
+      
+    state['step'] += 1
+
   @torch.no_grad()
   def step(self, closure = None):
     loss = None
@@ -129,5 +153,7 @@ class BaseOptimizer(Optimizer):
         state = self.state[param]
         if len(state) == 0:
           self.init_state(state, group, param)
+
         self.update(state, group, grad, param)
+    
     return loss
