@@ -29,7 +29,7 @@ class BaseConfig:
     return self.__dict__
 
 
-class BaseOptimizer (optim.Optimizer):
+class BaseOptimizer (Optimizer):
 
   def __init__  (self, params, config: BaseConfig = BaseConfig()):
     if not config.lr > 0.0:
