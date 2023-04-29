@@ -26,13 +26,15 @@ class MomentumConfig(SGDConfig):
 
 
 class Momentum(SGD):
+  
   def __init__(self, params, config : MomentumConfig = MomentumConfig()):
-    if 1 >= config.momentum > 0:
+    if not 1 >= config.momentum > 0:
       raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
                        "Value must not be 0")
       
-    if 1 >= config.dampening >= 0:
+    if not 1 >= config.dampening >= 0:
       raise ValueError(f"Invalid value for dampening in config: {config.dampening} ", 
                        "Value must not be less than 0")
+    
     super().__init__(params, config)
     self.config = config
