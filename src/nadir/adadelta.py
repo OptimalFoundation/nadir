@@ -16,31 +16,32 @@ from dataclasses import dataclass
 
 import torch
 
-from .base import BaseOptimizer
-from .base import BaseConfig
+from .adam import Adam, AdamConfig
 
 
 __all__ = ['AdadeltaConfig', 'Adadelta']
 
 @dataclass
-class AdadeltaConfig(BaseConfig):
+class AdadeltaConfig(AdamConfig):
   lr : float = 1
-  adaptive : bool = True
   rho : float = 0.90
+  beta_1 : float = 0.0
   beta_2 : float = 0.90
   eps : float = 1E-6
+  bias_correction : bool = False
 
 
-class Adadelta(BaseOptimizer):
+class Adadelta(Adam):
   def __init__ (self, params, config : AdadeltaConfig = AdadeltaConfig()):
     super().__init__(params, config)
 
     self.config = config
+
     if self.config.rho != self.config.beta_2:
       self.config.beta_2 = self.config.rho
   
   def init_state(self, state, group, param):
-    state['adaptive_step'] = 0
+    state['step'] = 0
     state['adaptivity'] = torch.zeros_like(param, memory_format=torch.preserve_format)
     state['acc_delta'] = torch.zeros_like(param, memory_format=torch.preserve_format)
 
@@ -57,4 +58,4 @@ class Adadelta(BaseOptimizer):
     param.data.add_(delta, alpha = -1 * lr)
 
     m.mul_(rho).addcmul_(delta, delta, value=(1 - rho))
-    state['acc_delta'] = m 
+    state['acc_delta'] = m    
