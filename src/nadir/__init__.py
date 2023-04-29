@@ -28,7 +28,7 @@ from .radam import Radam, RadamConfig
 from .sgd import SGD, SGDConfig
 
 
-__version__ = "0.0.4"
+__version__ = "0.1.0"
 
 __all__ = ('Adadelta',
            'AdadeltaConfig',
