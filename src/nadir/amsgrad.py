@@ -18,30 +18,18 @@ from dataclasses import dataclass
 import torch
 from torch.optim.optimizer import Optimizer
 
-from .base import BaseOptimizer
-from .base import BaseConfig
+from .adam import Adam, AdamConfig
 
 __all__ = ['AMSGradConfig', 'AMSGrad']
 
 @dataclass
-class AMSGradConfig(BaseConfig):
+class AMSGradConfig(AdamConfig):
   lr : float = 3E-4
-  momentum : bool = True
-  adaptive : bool = True
-  beta_1 : float = 0.9
-  beta_2 : float = 0.999
-  eps : float = 1E-8
-  weight_decay : float = 0.
   amsgrad : bool = True
 
-class AMSGrad(BaseOptimizer):
+class AMSGrad(Adam):
   def __init__ (self, params, config : AMSGradConfig = AMSGradConfig()):
-    if not config.momentum:
-      raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
-                       "Value must be True")
-    if not config.adaptive:
-      raise ValueError(f"Invalid value for adaptive in config: {config.adaptive} ", 
-                       "Value must be True")
+    
     if not config.amsgrad:
       raise ValueError(f"Invalid value for amsgrad in config: {config.amsgrad} ", 
                        "Value must be True")
