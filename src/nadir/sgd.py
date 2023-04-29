@@ -28,6 +28,7 @@ class SGDConfig(BaseConfig):
   momentum : float = 0.0
   dampening : float = 0.0
   weight_decay : float = 0.0
+  nesterov : bool = False
 
 class SGD(BaseOptimizer):
   def __init__(self, params, config: SGDConfig = SGDConfig()):
@@ -42,7 +43,27 @@ class SGD(BaseOptimizer):
     if 1 >= self.config.momentum > 0:
       state['momentum'] = torch.zeros_like(param, memory_format=torch.preserve_format)
 
+  def nesterov(momentum):
 
+    def __momentum__(self, state, grad):
+      m = momentum(self, state, grad)
+      
+      if self.config.nesterov:
+        beta = self.config.momentum
+        step = state['step']
+
+        if step > 0:
+          n = m.mul(beta).add_(grad)
+        else:
+          n = grad
+    
+        return n
+
+      return m
+
+    return __momentum__
+  
+  @nesterov
   def momentum(self,
                state, 
                grad):
@@ -76,3 +97,4 @@ class SGD(BaseOptimizer):
       param.data.add_(param.data,
                       alpha = -1 * lr * self.config.weight_decay)
     state['step'] += 1
+  
