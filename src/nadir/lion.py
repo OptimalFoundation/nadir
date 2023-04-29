@@ -24,21 +24,13 @@ __all__ = ['LionConfig', 'Lion']
 
 @dataclass
 class LionConfig(BaseConfig):
-  lr : float = 1E-4
-  momentum : bool = True
+  lr : float = 3E-4
   beta_1 : float = 0.9
   beta_2 : float = 0.99
-  eps : float = 1E-8
-  weight_decay : float = 0.
-
-
+  weight_decay : float = 0.0
 
 class Lion(BaseOptimizer):
-  
-  def __init__(self, params, config: LionConfig = LionConfig()):
-    if not config.momentum:
-      raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
-                       "Value must be True")
+  def __init__ (self, params, config : LionConfig = LionConfig()):
     if not 1 > config.beta_1 > 0.:
       raise ValueError(f"Invalid value for beta_1 in config: {config.beta_1} ", 
                        "Value must be between 1 and 0")
@@ -47,6 +39,15 @@ class Lion(BaseOptimizer):
                        "Value must be between 1 and 0")
     super().__init__(params, config)
     self.config = config
+
+  def init_state(self,
+                 state,
+                 group,
+                 param):
+    
+    state['step'] = 0
+    
+    state['momentum'] = torch.zeros_like(param, memory_format=torch.preserve_format)
 
   def momentum(self, state, grad):
     m = state['momentum']
@@ -60,3 +61,20 @@ class Lion(BaseOptimizer):
     state['momentum'] = m
 
     return torch.sign(u)
+  
+  def update(self,
+             state: Dict[str, any],
+             group: Dict[str, any],
+             grad:  torch.Tensor,
+             param: torch.Tensor):
+    
+    lr = group['lr']
+    
+    m = self.momentum(state, grad)
+
+    param.data.add_(m, alpha = -1 * lr)
+
+    if self.config.weight_decay > 0:
+      param.data.add_(param.data,
+                      alpha = -1 * lr * self.config.weight_decay)
+    state['step'] += 1

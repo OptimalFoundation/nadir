@@ -16,33 +16,23 @@ from dataclasses import dataclass
 
 import torch
 
-from .base import BaseOptimizer
-from .base import BaseConfig
+from .adam import Adam, AdamConfig
 
 
 __all__ = ['AdamWConfig', 'AdamW']
 
 @dataclass
-class AdamWConfig(BaseConfig):
+class AdamWConfig(AdamConfig):
   lr : float = 3E-4
-  momentum : bool = True
-  adaptive : bool = True
-  beta_1 : float = 0.9
-  beta_2 : float = 0.999
-  eps : float = 1E-8
   weight_decay : float = 0.01
 
-class AdamW(BaseOptimizer):
+class AdamW(Adam):
   def __init__ (self, params, config : AdamWConfig = AdamWConfig()):
-    if not config.momentum:
-      raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
-                       "Value must be True")
-    if not config.adaptive:
-      raise ValueError(f"Invalid value for adaptive in config: {config.adaptive} ", 
-                       "Value must be True")
+
     if not 1.0 > config.weight_decay > 0.0:
       raise ValueError(f"Invalid value for weight_decay in config: {config.weight_decay} ", 
                        "Value must be float between 0 and 1")  
+      
     super().__init__(params, config)
     
     self.config = config

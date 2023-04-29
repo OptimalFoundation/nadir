@@ -17,14 +17,12 @@ from dataclasses import dataclass
 
 import torch
 
-from .base import BaseOptimizer
-from .base import BaseConfig
-
+from .adam import Adam, AdamConfig
 
 __all__ = ['AdamaxConfig', 'Adamax']
 
 @dataclass
-class AdamaxConfig(BaseConfig):
+class AdamaxConfig(AdamConfig):
   lr : float = 2E-3
   momentum : bool = True
   adaptive : bool = True
@@ -32,8 +30,7 @@ class AdamaxConfig(BaseConfig):
   beta_2 : float = 0.999
   eps : float = 1E-8
 
-
-class Adamax(BaseOptimizer):
+class Adamax(Adam):
   def __init__ (self, params, config : AdamaxConfig = AdamaxConfig()):
     if not config.momentum:
       raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
@@ -48,6 +45,8 @@ class Adamax(BaseOptimizer):
   def adaptivity(self, state, grad):
     u = state['adaptivity']
     beta_2 = self.config.beta_2
+
     u = torch.max(torch.mul(u, beta_2), torch.abs(grad) + self.config.eps)
+    
     state['adaptivity'] = u
     return u

@@ -24,17 +24,15 @@ from .base import BaseConfig
 __all__ = ['RadamConfig', 'Radam']
 
 @dataclass
-class RadamConfig(BaseConfig):
+class RadamConfig(AdamConfig):
   lr : float = 3E-4
-  momentum : bool = True
-  adaptive : bool = True
   beta_1 : float = 0.9
   beta_2 : float = 0.99
   eps : float = 1E-8
   weight_decay : float = 0.
 
-class Radam(BaseOptimizer):
-  def __init__ (self, params, config : RadamConfig = RadamConfig()):
+class Radam(Adam):
+  def __init__ (self, params, config : LionConfig = LionConfig()):
     super().__init__(params, config)
     self.config = config
 

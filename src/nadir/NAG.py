@@ -11,28 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from typing import Dict, Tuple, Any, Optional
+from typing import Dict, Any, Optional
 from dataclasses import dataclass
 
 import torch
-from torch.optim.optimizer import Optimizer
 
-from .adam import Adam, AdamConfig
+from .momentum import Momentum, MomentumConfig
 
-__all__ = ['AMSGradConfig', 'AMSGrad']
+__all__ = ['NAGConfig', 'NAG']
 
 @dataclass
-class AMSGradConfig(AdamConfig):
+class NAGConfig(MomentumConfig):
   lr : float = 3E-4
-  amsgrad : bool = True
+  momentum : float = 0.99
+  dampening : float = 0.05
+  weight_decay : float = 0.
+  nesterov : bool = True
 
-class AMSGrad(Adam):
-  def __init__ (self, params, config : AMSGradConfig = AMSGradConfig()):
-    
-    if not config.amsgrad:
-      raise ValueError(f"Invalid value for amsgrad in config: {config.amsgrad} ", 
-                       "Value must be True")
+class NAG(Momentum):
+  def __init__ (self, params, config : NAGConfig = NAGConfig()):
     super().__init__(params, config)
-    
     self.config = config
+  

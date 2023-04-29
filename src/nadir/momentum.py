@@ -14,25 +14,27 @@
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
 
-import torch
-
-from .base import BaseOptimizer
-from .base import BaseConfig
-
+from .sgd import SGDConfig, SGD
 
 __all__ = ['MomentumConfig', 'Momentum']
 
 @dataclass
-class MomentumConfig(BaseConfig):
+class MomentumConfig(SGDConfig):
   lr : float = 1E-3
-  momentum : bool = True
-  beta_1 : float = 0.95
+  momentum : float = 0.9
+  dampening : float = 0.05
 
-class Momentum(BaseOptimizer):
+
+class Momentum(SGD):
   
   def __init__(self, params, config : MomentumConfig = MomentumConfig()):
-    if not config.momentum:
+    if not 1 >= config.momentum > 0:
       raise ValueError(f"Invalid value for momentum in config: {config.momentum} ", 
-                       "Value must be True")
+                       "Value must not be 0")
+      
+    if not 1 >= config.dampening >= 0:
+      raise ValueError(f"Invalid value for dampening in config: {config.dampening} ", 
+                       "Value must not be less than 0")
+    
     super().__init__(params, config)
     self.config = config
