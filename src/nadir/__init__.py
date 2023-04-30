@@ -28,7 +28,7 @@ from .radam import Radam, RadamConfig
 from .sgd import SGD, SGDConfig
 
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = ('Adadelta',
            'AdadeltaConfig',
@@ -45,6 +45,10 @@ __all__ = ('Adadelta',
            'LionConfig',
            'Momentum',
            'MomentumConfig',
+           'Nadam',
+           'NadamConfig',
+           'NAG',
+           'NAGConfig',
            'RMSProp',
            'RMSPropConfig',
            'Radam',

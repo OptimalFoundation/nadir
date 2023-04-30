@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nadir"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   { name="Bhavnick Minhas", email="bhavnicksm@gmail.com" },
 ]
