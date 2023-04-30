@@ -55,20 +55,22 @@ optimizer.step()
 
 # Supported Optimisers
 
-| Optimiser 	| Paper 	                                            |
-|:---------:	|:-----:	                                            |
-|  **SGD**  	| https://paperswithcode.com/method/sgd                 |
-|  **Momentum** | https://paperswithcode.com/method/sgd-with-momentum   |
-|  **NAG**      | https://jlmelville.github.io/mize/nesterov.html       |
+| Optimiser 	| Paper 	                                                 |
+|:---------:	|:-----:	                                                 |
+|  **SGD**  	| https://paperswithcode.com/method/sgd                      |
+|  **Momentum** | https://paperswithcode.com/method/sgd-with-momentum        |
+|  **NAG**      | https://jlmelville.github.io/mize/nesterov.html            |
 |  **Adagrad** 	| https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf |
-|  **RMSProp** 	| https://paperswithcode.com/method/rmsprop             |
-|  **Adam**     | https://arxiv.org/abs/1412.6980v9                     |
-|  **Adamax**   | https://arxiv.org/abs/1412.6980v9                     |
-|  **AdamW**    | https://arxiv.org/abs/1711.05101v3                    |
-|  **Adadelta** | https://arxiv.org/abs/1212.5701v1                     |
-|  **AMSGrad**    | https://arxiv.org/abs/1904.09237v1                  |
-|  **RAdam**    | https://arxiv.org/abs/1908.03265v4                    |
-|  **Lion**     | https://arxiv.org/abs/2302.06675                      |
+|  **RMSProp** 	| https://paperswithcode.com/method/rmsprop                  |
+|  **Adam**     | https://arxiv.org/abs/1412.6980v9                          |
+|  **Adamax**   | https://arxiv.org/abs/1412.6980v9                          |
+|  **AdamW**    | https://arxiv.org/abs/1711.05101v3                         |
+|  **Adadelta** | https://arxiv.org/abs/1212.5701v1                          |
+|  **AMSGrad**  | https://arxiv.org/abs/1904.09237v1                         |
+|  **RAdam**    | https://arxiv.org/abs/1908.03265v4                         |
+|  **Lion**     | https://arxiv.org/abs/2302.06675                           |
+|  **AdaBelief**| https://arxiv.org/pdf/2010.07468v5.pdf                     |
+|  **NAdam**    | http://cs229.stanford.edu/proj2015/054_report.pdf          |
 
 # Acknowledgements
 
