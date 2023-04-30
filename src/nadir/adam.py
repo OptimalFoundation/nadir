@@ -31,6 +31,7 @@ class AdamConfig(BaseConfig):
   eps : float = 1E-8
   weight_decay : float = 0.0
   amsgrad : bool = False
+  nesterov : bool = False
   bias_correction: bool = True
 
 class Adam(BaseOptimizer):
@@ -61,6 +62,31 @@ class Adam(BaseOptimizer):
       if self.config.amsgrad:
         state['amsgrad'] = torch.zeros_like(param, memory_format=torch.preserve_format)
 
+  def nesterov(momentum):
+
+    def __momentum__(self, state, grad):
+      m = momentum(self, state, grad)
+      
+      if self.config.nesterov:
+        beta = self.config.beta_1
+        step = state['step']
+
+        if step > 0:
+          if self.config.bias_correction:
+            grad_hat = grad.mul(1-beta).div(1 - beta ** (step))
+          else:
+            grad_hat = grad
+          n = m.mul(beta).add_(grad_hat)
+        else:
+          n = grad
+    
+        return n
+
+      return m
+
+    return __momentum__
+  
+  @nesterov
   def momentum(self,
                state, 
                grad):
