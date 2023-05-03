@@ -1,6 +1,10 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "nadir"
-version = "0.0.1"
+version = "0.1.1"
 authors = [
   { name="Bhavnick Minhas", email="bhavnicksm@gmail.com" },
 ]
@@ -16,11 +20,19 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Artificial Intelligence"
 ]
+license = { text = "Apache 2.0"}
+dependencies = [
+    "torch>=1.13.1",
+    "torchvision>=0.14.1",
+    "tqdm",
+    "wandb"
+]
 
 [project.urls]
 "Homepage" = "https://github.com/Dawn-Of-Eve/nadir"
 "Bug Tracker" = "https://github.com/Dawn-Of-Eve/nadir/issues"
 
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+
+[tools.setuptools]
+packages = ["nadir"]
+package-dir = {"" = "src"}

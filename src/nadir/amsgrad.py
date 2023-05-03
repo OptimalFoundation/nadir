@@ -12,14 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from typing import Dict, Tuple, Any, Optional
+from dataclasses import dataclass
 
-from typing import Dict, List, Type
+import torch
 from torch.optim.optimizer import Optimizer
-from .BaseOptimiser import BaseOptimizer, DoEConfig
 
-from .SGD import SGD, SGDConfig
 from .adam import Adam, AdamConfig
 
-__all__ = ('SGD', 'SGDConfig', 'Adam', 'AdamConfig')
+__all__ = ['AMSGradConfig', 'AMSGrad']
 
-__version__ = "0.0.1"
+@dataclass
+class AMSGradConfig(AdamConfig):
+  lr : float = 3E-4
+  amsgrad : bool = True
+
+class AMSGrad(Adam):
+  def __init__ (self, params, config : AMSGradConfig = AMSGradConfig()):
+    
+    if not config.amsgrad:
+      raise ValueError(f"Invalid value for amsgrad in config: {config.amsgrad} ", 
+                       "Value must be True")
+    super().__init__(params, config)
+    
+    self.config = config

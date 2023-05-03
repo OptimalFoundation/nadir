@@ -1,43 +1,92 @@
-![StableDiffusion image titled Dawn of Eve](/assets/dawn_of_eve2.png)
+![NADIRbanner2](https://user-images.githubusercontent.com/11348086/221370644-fcc05274-eb99-4237-a270-60dafd5ab69d.png)
 
-# Dawn Of Eve: Will Adam Optimizer Rest in Peace or Long Live and Prosper? 
+# Nadir
 
-Since ages Adam has absolutely dominated the Large Language Modelling Sphere for optimization.\
-Practically no other optimizer has come close since plain SGD to the prowess and general usability of Adam, to the point where even after considerable work showcasing improvements over Adam, it still rules. 
+![PyPI - Downloads](https://img.shields.io/pypi/dm/nadir)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Dawn-Of-Eve/nadir)
+![GitHub Repo stars](https://img.shields.io/github/stars/Dawn-Of-Eve/nadir?style=social)
+![Twitter Follow](https://img.shields.io/twitter/follow/dawnofevehq?style=social)
 
-This repository is a **reseach** project, meant to serve as a benchmark for experiments on Optimizers and Language Modelling. 
+**Nadir** (pronounced _nay-di-ah_) is derived from the arabic word _nazir_, and means "the lowest point of a space". In optimisation problems, it is equivalent to the point of minimum. If you are a machine learning enthusiast, a data scientist or an AI practitioner, you know how important it is to use the best optimization algorithms to train your models. The purpose of this library is to help optimize machine learning models and enable them to reach the point of nadir in the appropriate context.
 
-## Research Problems/Motivation
+PyTorch is a popular machine learning framework that provides a flexible and efficient way of building and training deep neural networks. This library, Nadir, is built on top of PyTorch to provide high-performing general-purpose optimisation algorithms.  
 
-Most people in the NLProc community directly utilize Adam Optimizers as a design choice without going through extensive search over optimizers, simply because of its robustness out-of-the-box. While helpful in abstrating out this part of the pipeline, it might be hurting performance more than one would realise, since the type of optimizer can determine the quality of model quiet drastically. (not all optimizers are the same)
+# Table of Contents
 
-Research Problems this project is trying to tackle:
-
-* "Where and how has Adam been utilized for large language modelling?"
-    * There must be a reason why Adam is so dominant for large language modelling, and understanding that is the first step to understading the alternative options to Adam. 
-
-* "What alternative options are there to Adam? Are they competitive?"
-    * There are a number of considerations to make while choosing the optimizer for LLM training, like convergence speed, memory overload, training speed and more. For alternatives to be truely competitive, they should present significiant improvements in one or more of these factors.
-    * Another important factor to understand whether Adam should be replaced for LLM training is that "can you live without the alternative?". If an alternative is insignificant in its benefit as compared to Adam, utilizing it would not make sense because of the deeprooted-ness of the Adam in the community and ease of use from being readily available in frameworks.
-
-* "I see the claims of the alternatives but how well do they actually perform in practice?"
-    * Without extensive experimentation and emperical (hard and cold) evidence to back the claims of improvement over Adam, nothing really matters. That's the beauty of the research community based on peer-review. 
-    * Tragically, one of the reasons why most of the recent work on convex optimisation has not made it to the industry (at least for LLMing) is the lack of proper testing on language modelling objectives, used with transformer-like models. Most papers, if at all, test LLMing on LSTMs, which learn differently than Transformers and might have different results. 
+- [Nadir](#nadir)
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+- [Simple Usage](#simple-usage)
+- [Supported Optimisers](#supported-optimisers)
+- [Acknowledgements](#acknowledgements)
+- [Citation](#citation)
 
 
-## Citations
-<!-- 
-If you wish to cite this work, please use the following bibtex:
+
+# Installation
+
+You can either choose to install from the PyPI index, in the following manner:
+
+```bash
+$ pip install nadir
+```
+or install from source, in the following manner:
+
+```bash
+$ pip install git+https://github.com/Dawn-Of-Eve/nadir.git
+```
+**Note:** Installing from source might lead to a breaking package. It is recommended that you install from PyPI itself.
+
+# Simple Usage
+
+```python
+import nadir as nd
+
+# some model setup here...
+model = ...
+
+# set up your Nadir optimiser
+config = nd.SGDConfig(lr=learning_rate)
+optimizer = nd.SGD(model.parameters(), config)
+
+# Call the optimizer step
+optimizer.step()
+```
+
+# Supported Optimisers
+
+| Optimiser 	| Paper 	                                                 |
+|:---------:	|:-----:	                                                 |
+|  **SGD**  	| https://paperswithcode.com/method/sgd                      |
+|  **Momentum** | https://paperswithcode.com/method/sgd-with-momentum        |
+|  **NAG**      | https://jlmelville.github.io/mize/nesterov.html            |
+|  **Adagrad** 	| https://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf |
+|  **RMSProp** 	| https://paperswithcode.com/method/rmsprop                  |
+|  **Adam**     | https://arxiv.org/abs/1412.6980v9                          |
+|  **Adamax**   | https://arxiv.org/abs/1412.6980v9                          |
+|  **AdamW**    | https://arxiv.org/abs/1711.05101v3                         |
+|  **Adadelta** | https://arxiv.org/abs/1212.5701v1                          |
+|  **AMSGrad**  | https://arxiv.org/abs/1904.09237v1                         |
+|  **RAdam**    | https://arxiv.org/abs/1908.03265v4                         |
+|  **Lion**     | https://arxiv.org/abs/2302.06675                           |
+|  **AdaBelief**| https://arxiv.org/pdf/2010.07468v5.pdf                     |
+|  **NAdam**    | http://cs229.stanford.edu/proj2015/054_report.pdf          |
+
+# Acknowledgements
+
+We would like to thank all the amazing contributors of this project who spent so much effort making this repositary awesome! :heart:
+
+
+# Citation
+
+You can use the _Cite this repository_ button provided by Github or use the following bibtex:
+
 ```bibtex
-``` -->
-
-For a list of citations regarding the papers used to make this repository, please refer to [citations.md](citations.md). If any citation is missing please inform the repository maintainer to get it included. 
-
-## Misc.
-
-Here's a poem written for the demise of Adam:
-> Adam is Old  
-> Adam is Tired  
-> Adam has Back-Pain  
-> Adam wants to Retire  
->                       ~@bhavnicksm, 2022
+@software{MinhasNadir,
+    title        = {{Nadir: A Library for Bleeding-Edge Optimizers in PyTorch}},
+    author       = {Minhas, Bhavnick and Kalathukunnel, Apsal},
+    year         = 2023,
+    month        = 3,
+    version      = {0.0.2}
+}
+```
