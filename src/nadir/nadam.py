@@ -11,32 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from typing import Dict, Tuple, Any, Optional
+from typing import Dict, Any, Optional
+from dataclasses import dataclass
 
 import torch
-from torch.optim.optimizer import Optimizer
 
+from .adam import Adam, AdamConfig
 
-class DoEConfig():
-    pass
+__all__ = ['Nadam', 'NadamConfig']
 
+@dataclass
+class NadamConfig(AdamConfig):
+  lr : float = 3E-4
+  nesterov : bool = True
 
-
-class BaseOptimizer(Optimizer):
-    def __init__(
-        self, 
-        params, 
-        config : DoEConfig, 
-        defaults: Dict[str, Any] 
-
-
-    ):
-        defaults = config.__dict__
-
-        super().__init__(params, defaults)
-    
-    
-
-
-
+class Nadam(Adam):
+  def __init__ (self, params, config : NadamConfig = NadamConfig()):
+    super().__init__(params, config)
+    self.config = config
+  
