@@ -94,7 +94,7 @@ class MNISTestNet(nn.Module):
         return output
 
 
-def train(args, model, device, train_loader, optimizer, epoch):
+def train(args, model, device, train_loader, oAdadeltaptimizer, epoch):
     model.train()
     for (data, target)in (pbar := tqdm(train_loader)):
         data, target = data.to(device), target.to(device)
@@ -191,6 +191,7 @@ def mnist_tester(model, optimizer=None, args = None):
     # images, labels = next(iter(train_loader))
     # img_grid = utils.make_grid(images)
     # wandb.log({'mnist_images': img_grid})
+
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
 
 
