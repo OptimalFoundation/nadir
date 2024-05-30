@@ -16,6 +16,7 @@ PyTorch is a popular machine learning framework that provides a flexible and eff
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Simple Usage](#simple-usage)
+- [Core Philosphy](#core-philosophy)
 - [Supported Optimisers](#supported-optimisers)
 - [Acknowledgements](#acknowledgements)
 - [Citation](#citation)
