@@ -33,7 +33,7 @@ $ pip install nadir
 or install from source, in the following manner:
 
 ```bash
-$ pip install git+https://github.com/Dawn-Of-Eve/nadir.git
+$ pip install git+https://github.com/OptimalFoundation/nadir.git
 ```
 **Note:** Installing from source might lead to a breaking package. It is recommended that you install from PyPI itself.
 
