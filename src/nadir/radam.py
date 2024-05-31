@@ -17,9 +17,7 @@ from dataclasses import dataclass
 import torch
 import math
 
-from .base import BaseOptimizer
-from .base import BaseConfig
-
+from .adam import Adam, AdamConfig
 
 __all__ = ['RadamConfig', 'Radam']
 
@@ -32,7 +30,7 @@ class RadamConfig(AdamConfig):
   weight_decay : float = 0.
 
 class Radam(Adam):
-  def __init__ (self, params, config : LionConfig = LionConfig()):
+  def __init__ (self, params, config : AdamConfig = AdamConfig()):
     super().__init__(params, config)
     self.config = config
 
