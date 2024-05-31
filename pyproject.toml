@@ -4,14 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nadir"
-version = "0.1.1"
 authors = [
   { name="Bhavnick Minhas", email="bhavnicksm@gmail.com" },
 ]
 maintainers = [
   { name = "Bhavnick Minhas", email="bhavnicksm@gmail.com"},
 ]
-description = "Nadir is a library of bleeding-edge DL optimisers built for speed and functionality in PyTorch for researchers"
+description = "Nadir: Cutting-edge PyTorch optimizers for simplicity & composability! 🔥🚀💻"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
@@ -24,6 +23,7 @@ license = { text = "Apache 2.0"}
 dependencies = [
     "torch>=1.13.1",
 ]
+dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
@@ -32,12 +32,13 @@ test = [
     "wandb"
 ]
 
-
 [project.urls]
-"Homepage" = "https://github.com/Dawn-Of-Eve/nadir"
-"Bug Tracker" = "https://github.com/Dawn-Of-Eve/nadir/issues"
-
+"Homepage" = "https://github.com/OptimalFoundation/nadir"
+"Bug Tracker" = "https://github.com/OptimalFoundation/nadir/issues"
 
 [tools.setuptools]
 packages = ["nadir"]
 package-dir = {"" = "src"}
+
+[tool.setuptools.dynamic]
+version = {  attr = "nadir.__version__" }
