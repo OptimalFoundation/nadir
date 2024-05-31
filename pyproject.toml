@@ -23,10 +23,15 @@ classifiers = [
 license = { text = "Apache 2.0"}
 dependencies = [
     "torch>=1.13.1",
+]
+
+[project.optional-dependencies]
+test = [
     "torchvision>=0.14.1",
     "tqdm",
     "wandb"
 ]
+
 
 [project.urls]
 "Homepage" = "https://github.com/Dawn-Of-Eve/nadir"
