@@ -2,7 +2,7 @@
 
 # Nadir
 
-![PyPI - Downloads](https://img.shields.io/pypi/dm/nadir)
+[![Downloads](https://static.pepy.tech/badge/nadir)](https://pepy.tech/project/nadir)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Dawn-Of-Eve/nadir)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Dawn-Of-Eve/nadir?style=social)
 
