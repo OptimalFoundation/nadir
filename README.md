@@ -2,7 +2,7 @@
 
 # Nadir
 
-![PyPI - Downloads](https://img.shields.io/pypi/dm/nadir)
+[![Downloads](https://static.pepy.tech/badge/nadir)](https://pepy.tech/project/nadir)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Dawn-Of-Eve/nadir)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Dawn-Of-Eve/nadir?style=social)
 [![Documentation Status](https://readthedocs.org/projects/nadir/badge/?version=latest)](https://nadir.readthedocs.io/en/latest/?badge=latest)
@@ -35,7 +35,7 @@ $ pip install nadir
 or install from source, in the following manner:
 
 ```bash
-$ pip install git+https://github.com/Dawn-Of-Eve/nadir.git
+$ pip install git+https://github.com/OptimalFoundation/nadir.git
 ```
 **Note:** Installing from source might lead to a breaking package. It is recommended that you install from PyPI itself.
 
