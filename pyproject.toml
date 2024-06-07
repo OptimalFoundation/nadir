@@ -31,6 +31,10 @@ test = [
     "tqdm",
     "wandb"
 ]
+docs = [
+  "sphinx",
+  "sphinx-book-theme"
+]
 
 [project.urls]
 "Homepage" = "https://github.com/OptimalFoundation/nadir"

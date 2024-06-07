@@ -16,3 +16,5 @@ nadir.egg-info/*
 tests/data/*
 
 build/*
+
+docs/build/*
