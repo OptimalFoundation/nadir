@@ -2,14 +2,22 @@
 #
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
+import os
+import sys
+
+
+file_loc = os.path.split(__file__)[0]
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(file_loc), '..')))
+
+import nadir
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'nadir'
-copyright = '2024, Bhavnick Minhas'
+copyright = '2024, Optimal Foundation Inc.'
 author = 'Bhavnick Minhas'
-release = '0.1.1'
+release = nadir.__version__ 
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
