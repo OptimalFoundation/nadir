@@ -33,7 +33,8 @@ test = [
 ]
 docs = [
   "sphinx",
-  "sphinx-book-theme"
+  "sphinx-book-theme",
+  "jupyter-book"
 ]
 
 [project.urls]
