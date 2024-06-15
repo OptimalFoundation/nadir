@@ -22,7 +22,11 @@ release = nadir.__version__
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx_external_toc"]
+extensions = [
+    "sphinx_external_toc",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon"
+]
 external_toc_path = "./_toc.yml"
 external_toc_exclude_missing = False
 
@@ -42,9 +46,9 @@ html_theme_options = {
     "use_issues_button": True,
     "use_download_button": True,
     "logo":{
-        "image_light": "../logo.png",
-        "image_dark": "../logo_dark.png",
+        "image_light": "_static/logo.png",
+        "image_dark": "_static/logo_dark.png",
     }
 }
-html_title = "Nadir"
+html_title = "Nadir Documentation"
 
