@@ -23,6 +23,8 @@ from .adamax import Adamax, AdamaxConfig
 from .base import BaseOptimizer, BaseConfig
 from .lion import Lion, LionConfig
 from .momentum import Momentum, MomentumConfig
+from .nadam import Nadam, NadamConfig
+from .nag import NAG, NAGConfig
 from .rmsprop import RMSProp, RMSPropConfig
 from .radam import Radam, RadamConfig
 from .sgd import SGD, SGDConfig
